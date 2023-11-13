@@ -1,0 +1,39 @@
+{% load thumbnail %}
+<tr>
+    <td class="col-1 align-middle">
+        <a class="cart-product-title" href="{{ item.product.get_absolute_url }}">
+            <div class="cart-image-container">
+                <img class ="small-image" src="{{ item.product.picture_1|thumbnail_url:'small' }}" alt="Product small-image">
+                <img class ="medium-image" src="{{ item.product.picture_1|thumbnail_url:'medium' }}" alt="Product medium-image">
+            </div>
+        </a>
+    </td>
+    <td class="col-8 align-middle">
+        <a class="cart-product-title" href="{{ item.product.get_absolute_url }}">
+            {% if item.product.discount > 0  and item.product.in_stock == True and item.product.reserved == False %}
+               <span class="cart-product-sale">SALE </span>
+            {% endif %}
+            {{item.product.title}}
+        </a>
+    </td>
+    <td class="col-2 align-middle text-end">
+        {% if item.product.in_stock == False %}
+        <span class="product-price">SOLD OUT</span>
+        {% elif item.product.reserved == True %}
+        <span class="product-price">RESERVED</span>
+        {% else %}
+            {% if item.product.discount > 0  and item.product.in_stock == True %}
+            <span class="product-old-price"><span class="dollar-sign">$</span>{{item.product.base_price}}</span>
+            {% endif %}
+        <span class="product-price"><span class="dollar-sign">$</span>{{item.product.price}}</span>
+        {% endif %}
+    </td>
+    <td class="col-1 align-middle">
+        <form method="post" action="{% url 'remove-item' %}">
+            {% csrf_token %}
+            <input id="product" name = "product_pk" type="hidden" value="{{ item.product.pk }}">
+            <input type="hidden" name="return_path" value="{{ request.path }}">
+            <button type="submit" class="cart-item-remove-btn"></button>
+        </form>
+    </td>
+</tr>

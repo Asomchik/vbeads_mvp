@@ -1,0 +1,102 @@
+{% load static %}
+{% load thumbnail %}
+{% load get_categories %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+        <title>{{ head_tag_title }}</title>
+    </head>
+    <body>
+        <div class="container">
+            {% block header %}
+            <div style="font-size: 30px;">This is MVP demo for online glass-bead-maker's store.</div>
+            <div class="header navbar navbar-expand-md">
+
+                <a class="navbar-brand" href="{% url 'main-page' %}">
+                    <img src="{% static 'v.svg' %}" alt="LOGO">
+                </a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link "  href="{% url 'about' %}">About</a>
+                        </li>
+
+                        {% get_categories_for_header as header_categories%}
+                        {% for category in header_categories %}
+                        <li class="nav-item">
+                            <a class="nav-link "  href="{% url 'category' slug=category.slug %}">{{ category.title }}</a>
+                        </li>
+                        {% endfor %}
+
+                        <li class="nav-item">
+                            <a class="nav-link "  href="{% url 'faq' %}">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+                <a class="nav-item-basket" href="{% url 'cart' %}">
+                    <img src="{% static 'basket.svg' %}" width="60" alt="BASKET">
+                    {% if cart_content|length > 0  and cart_content|length < 100 %}
+                    <div class="nav-cart-inside">{{ cart_content|length }}</div>
+                    {% elif cart_content|length >= 100 %}
+                    <div class="nav-cart-inside">...</div>
+                    {% endif %}
+                </a>
+            </div>
+            {% endblock header%}
+
+            <div class="fill-height">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}
+                {% endblock content %}
+            </div>
+
+            {% block footer %}
+                <div class="footer py-5">
+                        <div class="footer-contact">
+                            <a href="mailto:olga.vilnova.lampwork@gmail.com">
+                                <img src="{% static 'envelope.png' %}" alt="email_me" width="30">
+                                olga.vilnova.lampwork@gmail.com
+                            </a>
+                        </div>
+                        <div class="footer-socials">
+                            <span class="footer-icon">
+                                <a href="https://www.facebook.com/olga.vilnova"><img src="{% static 'fb.svg' %}" alt="FB" width="30"></a>
+                            </span>
+                            <span class="footer-icon">
+                                <a href="https://www.instagram.com/olgavilnova"><img src="{% static 'inst.svg' %}" alt="Instagram" width="30"></a>
+                            </span>
+
+                        </div>
+                        <div class="footer-policies">
+                            <a href="{% url 'policies' %}">Policies</a>
+                        </div>
+                </div>
+            {% endblock footer %}
+        </div>
+    <script>
+    function changeImage(imageUrl) {
+        var mainImage = document.getElementById('mainImage');
+        var imageLink = document.getElementById('imageLink');
+        mainImage.src = imageUrl;
+        imageLink.href = imageUrl;
+    }
+    </script>
+
+    </body>
+</html>

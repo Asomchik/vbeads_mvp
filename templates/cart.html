@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="row mx-0">
+{% if cart_content %}
+    <div class="col-8">
+
+        <table class="table cart-products">
+
+            {% for item in items_in_stock %}
+                {% include "_cart_item.html" %}
+            {% endfor%}
+
+            {% if items_in_stock %}
+            <tr>
+            <td class="cart-subtotal col align-middle text-start" colspan="2">Subtotal (without shipping fee)</td>
+            <td class="cart-subtotal  col align-middle text-end"><span class="dollar-sign">$</span>{{ subtotal }}</td>
+            <td></td>
+            </tr>
+            {% endif %}
+        </table>
+        {% if items_on_hold or items_sold %}
+            <p class="cart-sold-items">
+                {% if items_on_hold|add:items_sold|length > 1  %}
+                    <span>There are items in your cart which are </span>
+                {% else %}
+                    <span>There is an item in your cart which is </span>
+                {% endif %}
+                <span>already sold or reserved a little earlier by another customer. Sorry.</span>
+            </p>
+        <table class="table cart-unavailable-products">
+            {% for item in items_on_hold %}
+                {% include "_cart_item.html" %}
+            {% endfor%}
+            {% for item in items_sold %}
+                {% include "_cart_item.html" %}
+            {% endfor%}
+        </table>
+        {% endif %}
+    </div>
+    <div class="col-4">
+    {% if items_in_stock %}
+        <form class="order-form" method="post" action="{% url 'make-order-from-cart' %}">
+            <input type="hidden" name="return_path" value="{{ request.path }}">
+            {% csrf_token %}
+            <p>Please, provide information to process an order. An invoice will be sent to your email via PayPal within 24 hours.</p>
+            <div class="mb-3">
+                <input type="email" placeholder="*Enter your email" class="form-control" name="customer_email" maxlength="254" id="id_customer_email" aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">I'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <input type="text" placeholder="*Enter your country" class="form-control" name="country" maxlength="254" id="id_country" aria-describedby="countryHelp" required>
+                <div id="countryHelp" class="form-text">Delivery fee depends on your location.</div>
+            </div>
+            <div class="mb-3">
+                <textarea class="order-message" name="message"  placeholder="Comments (optionally)" rows="3"  id="id_message"></textarea>
+            </div>
+            <div class="mb-3 agree-with-policies">
+                <label for="agree_with_policies">
+                    <input type="checkbox" name="agree_with_policies" id="agree_with_policies" required>
+                        I have read and agree to the <a href="{% url 'policies' %}">Policies</a>
+                </label>
+            </div>
+            <div class="order-submit">
+                <button type="submit" class="add-remove-button add-button">submit your order</button>
+            </div>
+        </form>
+    {% endif %}
+
+    </div>
+{% else %}
+    <h2>Your cart is empty</h2>
+{% endif %}
+
+</div>
+
+{% endblock content %}

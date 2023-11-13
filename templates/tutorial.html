@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<p>THIS IS SPECIAL TUTORIAL DETAIL PAGE</p>
+<div class="row mx-0">
+
+<div class="col-6">
+
+<div class="gallery">
+
+    <div class="main-image
+    {% if product.in_stock == False %} sold-out{% endif %}
+    {% if product.reserved == True %} reserved{% endif %}
+    {% if product.discount > 0 %} sale{% endif %}
+    ">
+        <a id="imageLink" href="{{ product.picture_1.url }}" target="_blank">
+            <img id="mainImage" src="{{ product.picture_1.url }}" alt="{{ product.title }} image">
+        </a>
+    </div>
+
+    <div class="thumbnail-flex-container">
+    {% if product.picture_2 %}
+    <div class="thumbnail" onclick="changeImage('{{ product.picture_1.url }}')">
+        <img src="{{ product.picture_1.url }}" alt="preview">
+    </div>
+      <div class="thumbnail" onclick="changeImage('{{ product.picture_2.url }}')">
+        <img src="{{ product.picture_2.url }}" alt="preview">
+    </div>
+    {% endif %}
+
+    {% if product.picture_3 %}
+    <div class="thumbnail" onclick="changeImage('{{ product.picture_3.url }}')">
+        <img src="{{ product.picture_3.url }}" alt="preview">
+    </div>
+    {% endif %}
+
+    {% if product.picture_4 %}
+      <div class="thumbnail" onclick="changeImage('{{ product.picture_4.url }}')">
+        <img src="{{ product.picture_4.url }}" alt="preview">
+    </div>
+    {% endif %}
+    </div>
+
+</div>
+</div>
+
+<div class="col-6 product-page">
+
+    <div class="product-price-block">
+        {% if product.discount > 0  and product.in_stock == True%}
+            <span class="product-page-old-price"><span class="dollar-sign">$</span>{{product.base_price}}</span>
+        {% endif %}
+        <span class="product-page-price"><span class="dollar-sign">$</span>{{product.price}}</span>
+    </div>
+    <div class="product-page-title">{{product.title}}</div>
+
+    {% if product.in_stock == True %}
+
+        {% if product in cart_content %}
+            <div>
+                 <form method="post" action="{% url 'remove-item' %}">
+                    {% csrf_token %}
+                    <input id="product" name = "product_pk" type="hidden" value="{{ product.pk }}">
+                    <input type="hidden" name="return_path" value="{{ request.path }}">
+                    <button class="add-remove-button remove-button" type="submit">remove</button>
+                </form>
+            </div>
+        {% else %}
+            {% if product.reserved != True %}
+                <div>
+                     <form method="post" action="{% url 'add-item' %}">
+                        {% csrf_token %}
+                        <input id="product" name = "product_pk" type="hidden" value="{{ product.pk }}">
+                        <input type="hidden" name="return_path" value="{{ request.path }}">
+                        <button class="add-remove-button add-button" type="submit">add to cart</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="product-page-unavailable">This item is reserved</div>
+            {% endif %}
+        {% endif %}
+
+    {% else %}
+        <div class="product-page-unavailable">This item is SOLD</div>
+    {% endif %}
+    <div class="product-page-property">Size:
+        <span class="product-page-property-value">{{product.display_size}}</span>
+    </div>
+    <div class="product-page-property">Hole size:
+        <span class="product-page-property-value">{{product.hole_size}} mm</span>
+    </div>
+    <div class="product-page-property">Hole placement:
+        <span class="product-page-property-value">{{product.get_hole_position_display}}</span>
+    </div>
+    {% if product.description %}
+        <br>
+        <br>
+        <div class="product-page-property">{{product.description}}</div>
+    {% endif %}
+
+</div>
+
+</div>
+{% endblock %}

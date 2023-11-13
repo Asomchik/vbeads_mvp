@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load mptt_tags %}
+{% load thumbnail %}
+
+{% block content %}
+{% include '_categories_menu.html' %}
+
+{% block products %}
+    <h3 class="category-name">{{category_text}}</h3>
+    <div class="row mx-0 gy-3">
+        {% for product in object_list%}
+            {% include "_prod_card.html" %}
+        {% endfor %}
+        <div class="fiction-card"></div>
+        <div class="fiction-card"></div>
+        <div class="fiction-card"></div>
+    </div>
+{% endblock products%}
+
+{% block promotions %}
+    <h3 class="promo-text-title">Also you may be interested in</h3>
+    <div class="row mx-0 promotions g-3">
+        {% for product in promotions%}
+            {% include "_prod_card.html" %}
+        {% endfor %}
+        <div class="fiction-card"></div>
+        <div class="fiction-card"></div>
+        <div class="fiction-card"></div>
+    </div>
+{% endblock promotions %}
+
+{% endblock content %}

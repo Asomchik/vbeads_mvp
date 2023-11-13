@@ -1,0 +1,39 @@
+<div class="card" id="{{ product.slug }}">
+    <p>THIS IS SPECIAL TUTORIAL CARD</p>
+    <img src="{{ product.picture_1.url }}" class="card-img-top" alt="{{ product.title }} image">
+
+    <div class="card-body">
+        <a class="product-link" href="{{product.get_absolute_url}}"></a>
+        <p class="product-title">{{product.title}}</p>
+        <div class="card-price-block">
+            {% if product.discount > 0  and product.in_stock == True%}
+                <span class="product-old-price"><span class="dollar-sign">$</span>{{product.base_price}}</span>
+            {% endif %}
+                <span class="product-price"><span class="dollar-sign">$</span>{{product.price}}</span>
+        </div>
+    </div>
+
+    {% if product in cart_content %}
+    <div class="card-button">
+         <form method="post" action="{% url 'remove-item' %}">
+            {% csrf_token %}
+            <input id="product" name = "product_pk" type="hidden" value="{{ product.pk }}">
+            <input type="hidden" name="return_path" value="{{ request.path }}#{{ product.slug }}">
+            <button class="add-remove-button remove-button" type="submit">remove</button>
+        </form>
+    </div>
+
+    {% else %}
+        {% if product.in_stock == True and product.reserved == False %}
+        <div class="card-button">
+             <form method="post" action="{% url 'add-item' %}">
+            {% csrf_token %}
+            <input id="product" name = "product_pk" type="hidden" value="{{ product.pk }}">
+            <input type="hidden" name="return_path" value="{{ request.path }}#{{ product.slug }}">
+            <button class="add-remove-button add-button" type="submit">add to cart</button>
+        </form>
+        </div>
+    {% endif %}
+
+{% endif %}
+</div>

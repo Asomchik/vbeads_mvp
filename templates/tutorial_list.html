@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+{% block roots %}
+    <div class="menu-root">
+      <ul class="list-group list-group-horizontal-lg">
+        {% for root in roots%}
+          {% if root == active_root%}
+            <li class="list-group-item menu-root-active{% if root.slug == 'sale' %} menu-root-sale{% endif %}">
+          {% else %}
+            <li class="list-group-item menu-root border-0{% if root.slug == 'sale' %} menu-root-sale{% endif %}">
+          {% endif %}
+              <a href="{{root.get_absolute_url}}">{{root.title}}</a>
+            </li>
+        {% endfor %}
+      </ul>
+    </div>
+{% endblock roots %}
+
+{# section of products #}
+{% block products %}
+    <br><br>
+    <h3>{{category_text}}</h3>
+    <br>
+    <div class="row mx-0 gy-3">
+    {% for product in object_list%}
+        {% include "_tutorial_card.html" %}
+    {% endfor %}
+    </div>
+{% endblock products%}
+
+{% block promotions %}
+    <br><br>
+    <h3>More cool beads</h3>
+    <br>
+    <div class="row mx-0 promotions g-3">
+        {% for product in promotions%}
+            {% include "_prod_card.html" %}
+        {% endfor %}
+    </div>
+{% endblock promotions %}
+
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_top %}
+    <input type="submit" value="Cancel" name="_cancel">
+    <input type="submit" value="In progress" name="_in_progress">
+    <input type="submit" value="Complete" name="_complete">
+    <input type="submit" value="Reserve" name="_reserve">
+    <input type="submit" value="Save" class="default" name="_save">
+{% endblock %}

@@ -1,0 +1,36 @@
+{# navigation bar - top level #}
+{% block roots %}
+    <div class="menu-root">
+      <ul class="list-group list-group-horizontal-lg">
+        {% for root in roots%}
+          {% if root == active_root%}
+            <li class="list-group-item menu-root-active{% if root.slug == 'sale' %} menu-root-sale{% endif %}">
+          {% else %}
+            <li class="list-group-item menu-root border-0{% if root.slug == 'sale' %} menu-root-sale{% endif %}">
+          {% endif %}
+              <a href="{{root.get_absolute_url}}">{{root.title}}</a>
+            </li>
+        {% endfor %}
+      </ul>
+    </div>
+{% endblock roots %}
+{# navigation bar - second level #}
+{% block branches %}
+  {% if branches %}
+      <div class="menu-branch">
+{#          <ul class="list-group list-group-horizontal-lg menu-branch">#}
+            <ul class="list-group list-group-horizontal d-none d-lg-flex menu-branch">
+
+            {% for branch in branches%}
+              {% if branch == active_branch%}
+                <li class="list-group-item menu-branch-active border-0">
+              {% else %}
+                <li class="list-group-item menu-branch border-0">
+              {% endif %}
+                <a href="{{branch.get_absolute_url}}">{{branch.title}}</a>
+                </li>
+            {% endfor %}
+          </ul>
+      </div>
+  {% endif %}
+{% endblock branches %}

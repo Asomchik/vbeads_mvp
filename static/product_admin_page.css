@@ -1,0 +1,47 @@
+.aligned label{
+    width: 80px;
+}
+img {
+    margin-right: 10px;
+}
+
+.aligned label + div.readonly{
+    margin-left: 90px;
+}
+form .aligned ul{
+    margin-left: 0px;
+}
+form .aligned ul li{
+    padding: 0;
+    line-height: 14px;
+}
+.field-get_all_images{
+    /*position: relative;*/
+    min-height: 80px;
+    overflow: visible;
+}
+.admin-image-container{
+    position: relative;
+    display: inline-block;
+}
+.admin-image-container .medium-image{
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 100px;
+    z-index: 1;
+}
+.admin-image-container .small-image{
+    height: 70px;
+}
+.admin-image-container:hover .medium-image{
+    display: block;
+    height: 280px;
+}
+
+/*option{*/
+/*    padding: 1px 4px;*/
+/*}*/
+/*label{*/
+/*    border: 2px solid yellow;*/
+/*}*/

@@ -1,0 +1,12 @@
+.idea/
+__pycache__/
+venv/
+media/
+migrations/
+management/
+config/
+logs/
+*.sqlite3
+.env
+local_settings.py
+prod_settings.py
